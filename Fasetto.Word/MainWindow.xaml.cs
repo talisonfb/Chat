@@ -23,6 +23,8 @@ namespace Fasetto.Word
         public MainWindow()
         {
             InitializeComponent();
+
+            this.DataContext = new WindowViewModel(this);
         }
     }
 }
