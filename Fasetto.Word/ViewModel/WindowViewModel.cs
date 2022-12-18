@@ -37,7 +37,10 @@ namespace Fasetto.Word
 
         public int ResizeBorder { get; set; } = 6;
 
-        public Thickness ResizeBorderThickness { get { return new Thickness(ResizeBorder); } }
+        /// <summary>
+        /// The size of the resize border around the window, taking into account the outer margin
+        /// </summary>
+        public Thickness ResizeBorderThickness { get { return new Thickness(ResizeBorder + OuterMarginSize); } }
 
         /// <summary>
         /// The margin around the window to allow for a drop shadow
@@ -53,6 +56,35 @@ namespace Fasetto.Word
                 mOuterMarginSize = value;
             }
         }
+        /// <summary>
+        /// The margin around the window to allow for a drop shadow
+        /// </summary>
+        public Thickness OuterMarginSizeThickness { get { return new Thickness(OuterMarginSize); } }
+
+        /// <summary>
+        /// The radius of the edge of the window
+        /// </summary>
+        public CornerRadius WindowCornerRadius { get { return new CornerRadius(WindowRadius); } }
+
+        /// <summary>
+        /// The Height of the title bar / caption of the window
+        /// </summary>
+        public int TitleHeight { get; set; } = 42;
+
+        /// <summary>
+        /// The radius of the edge of the window
+        /// </summary>
+        public int WindowRadius
+        {
+            get
+            {
+                return mWindow.WindowState == WindowState.Maximized ? 0 : mWindowRadius;
+            }
+            set
+            {
+                mWindowRadius = value;
+            }
+        }
         
         #endregion
 
@@ -65,6 +97,17 @@ namespace Fasetto.Word
         public WindowViewModel(Window window)
         {
             mWindow = window;
+
+            // Listen out for the window resizing
+            mWindow.StateChanged += (sender, e) =>
+            {
+                // Fire off events for all properties that are affected by a resize
+                OnPropertyChanged(nameof(ResizeBorderThickness));
+                OnPropertyChanged(nameof(OuterMarginSize));
+                OnPropertyChanged(nameof(OuterMarginSizeThickness));
+                OnPropertyChanged(nameof(WindowRadius));
+                OnPropertyChanged(nameof(WindowCornerRadius));
+            };
         }
         #endregion
     }
