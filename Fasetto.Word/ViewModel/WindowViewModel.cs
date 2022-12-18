@@ -72,6 +72,11 @@ namespace Fasetto.Word
         public int TitleHeight { get; set; } = 42;
 
         /// <summary>
+        /// The Height of the title bar / caption of the window
+        /// </summary>
+        public GridLength TitleHeightGridLength { get { return new GridLength(TitleHeight + ResizeBorder); } }
+
+        /// <summary>
         /// The radius of the edge of the window
         /// </summary>
         public int WindowRadius
