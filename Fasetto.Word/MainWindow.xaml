@@ -67,6 +67,14 @@
                                         <TextBlock Style="{StaticResource HeaderText}" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue='Welcome, friend'}"/>
                                     </Viewbox>
 
+                                    <!-- Window Buttons -->
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <Button Style="{StaticResource WindowControlButton}" Content="_"/>
+                                        <Button Style="{StaticResource WindowControlButton}" Content="[ ]"/>
+                                        <Button Style="{StaticResource WindowControlButton}" Content="X"/>
+
+                                    </StackPanel>
+
                                     </Grid>
 
                                 </Grid>
