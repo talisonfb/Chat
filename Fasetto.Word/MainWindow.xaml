@@ -58,9 +58,14 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Icon -->
-                                    <Button Style="{StaticResource Hoverless}" WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding MenuCommand}">
+                                    <Button Style="{StaticResource SystemIconButton}"  Command="{Binding MenuCommand}">
                                         <Image Source="/Images/Logo/logo-small.png"/>
                                     </Button>
+
+                                    <!-- Title -->
+                                    <Viewbox Grid.Column="1" Margin="0">
+                                        <TextBlock Style="{StaticResource HeaderText}" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue='Welcome, friend'}"/>
+                                    </Viewbox>
 
                                     </Grid>
 
@@ -82,8 +87,7 @@
             />
     </WindowChrome.WindowChrome>
 
-    <Grid Background="Red">
-    </Grid>
+    
 </Window>
 
     

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Fasetto.Word
 {
@@ -90,7 +92,31 @@ namespace Fasetto.Word
                 mWindowRadius = value;
             }
         }
+
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// The command to minimize the window
+        /// </summary>
+        public ICommand MinimizeCommand { get; set; }
+
+        /// <summary>
+        /// The command to maximize the window
+        /// </summary>
+        public ICommand MaximizecCommand { get; set; }
+
+        /// <summary>
+        /// The command to close the window
+        /// </summary>
+        public ICommand CloseCommand { get; set; }
         
+        /// <summary>
+        /// The command to show the system menu of the window
+        /// </summary>
+        public ICommand MenuCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -113,7 +139,32 @@ namespace Fasetto.Word
                 OnPropertyChanged(nameof(WindowRadius));
                 OnPropertyChanged(nameof(WindowCornerRadius));
             };
+
+            // Create commands 
+            MinimizeCommand = new RelayCommand(() => mWindow.WindowState = WindowState.Maximized);
+            MaximizecCommand = new RelayCommand(() => mWindow.WindowState ^= WindowState.Maximized);
+            CloseCommand = new RelayCommand(() => mWindow.Close());
+            MenuCommand= new RelayCommand(() => SystemCommands.ShowSystemMenu(mWindow, GetMousePosition()));
         }
+        #endregion
+
+        #region Private Helpers
+
+        /// <summary>
+        /// Gets the current mouse position on the screen
+        /// </summary>
+        /// <returns></returns>
+        private Point GetMousePosition()
+        {
+            // Position of the mouse relative to the window
+
+            var position = Mouse.GetPosition(mWindow);
+
+            // Add the window position so its a "ToScreen"
+
+            return new Point(position.X + mWindow.Left, position.Y + mWindow.Top );
+        }
+
         #endregion
     }
 }
