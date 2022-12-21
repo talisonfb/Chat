@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -34,15 +35,26 @@ namespace Fasetto.Word
         #region Public Properties
 
         /// <summary>
-        /// The size of the resize border around the window
+        /// The smallest width and height the window can go
         /// </summary>
+        public double WindowMinimumWidth { get; set; } = 400;
+        public double WindowMinimumHeight { get; set; } = 400;
 
-        public int ResizeBorder { get; set; } = 6;
+    /// <summary>
+    /// The size of the resize border around the window
+    /// </summary>
+
+    public int ResizeBorder { get; set; } = 6;
+
+        /// <summary>
+        /// The padding of the inner content fo the main window 
+        /// </summary>
+        public Thickness InnerContentPaddin { get { return new Thickness(ResizeBorder + OuterMarginSize); } }
 
         /// <summary>
         /// The size of the resize border around the window, taking into account the outer margin
         /// </summary>
-        public Thickness ResizeBorderThickness { get { return new Thickness(ResizeBorder + OuterMarginSize); } }
+        public Thickness ResizeBorderThickness { get { return new Thickness(ResizeBorder); } }
 
         /// <summary>
         /// The margin around the window to allow for a drop shadow
@@ -105,7 +117,7 @@ namespace Fasetto.Word
         /// <summary>
         /// The command to maximize the window
         /// </summary>
-        public ICommand MaximizecCommand { get; set; }
+        public ICommand MaximizeCommand { get; set; }
 
         /// <summary>
         /// The command to close the window
@@ -141,10 +153,15 @@ namespace Fasetto.Word
             };
 
             // Create commands 
-            MinimizeCommand = new RelayCommand(() => mWindow.WindowState = WindowState.Maximized);
-            MaximizecCommand = new RelayCommand(() => mWindow.WindowState ^= WindowState.Maximized);
+            MinimizeCommand = new RelayCommand(() => mWindow.WindowState = WindowState.Minimized);
+            // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
+            MaximizeCommand = new RelayCommand(() => mWindow.WindowState ^= WindowState.Maximized);
             CloseCommand = new RelayCommand(() => mWindow.Close());
             MenuCommand= new RelayCommand(() => SystemCommands.ShowSystemMenu(mWindow, GetMousePosition()));
+
+            // Fix window resize issue
+
+            var resizer = new WindowResizer(mWindow);
         }
         #endregion
 
