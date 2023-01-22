@@ -1,8 +1,12 @@
-﻿using System.Windows;
+﻿using System;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Fasetto.Word
 {
+
     /// <summary>
     /// The MonitorPassword attached property for a <see cref="PasswordBox"/>
     /// </summary>
@@ -25,21 +29,37 @@ namespace Fasetto.Word
             {
 
                 // Set default value
-                HasTextProperty.SetValue(passwordBox, passwordBox.SecurePassword.Length > 0);
+                HasTextProperty.SetValue(passwordBox);
 
                 //start listening out for password changes
                 passwordBox.PasswordChanged += PasswordBox_PasswordChanged;
             }
         }
 
+        /// <summary>
+        /// Fired when the password box value changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            HasTextProperty.SetValue(passwordBox, passwordBox.SecurePassword.Length > 0);
+            // Set the attached HasText
+            HasTextProperty.SetValue((PasswordBox)sender);
         }
     }
 
     /// <summary>
     /// The HasText attached property for a <see cref="PasswordBox"/>
     /// </summary>
-    public class HasTextProperty : BaseAttachedProperty<HasTextProperty, bool> { }
+    public class HasTextProperty : BaseAttachedProperty<HasTextProperty, bool>
+    {
+        /// <summary>
+        /// Sets the HasText property based on if the caller <see cref="PasswordBox"/> has any text
+        /// </summary>
+        /// <param name="sender"></param>
+        public static void SetValue(DependencyObject sender)
+        {
+            SetValue(sender, ((PasswordBox)sender).SecurePassword.Length > 0);
+        }
+    }
 }
