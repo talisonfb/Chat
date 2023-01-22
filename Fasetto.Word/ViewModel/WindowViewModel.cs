@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Fasetto.Word
 {
+
     /// <summary>
     /// The View Model for the custom flat window
     /// </summary>
@@ -73,6 +76,7 @@ namespace Fasetto.Word
         {
             get
             {
+
                 // If it is maximized or docked, no border
                 return Borderless ? 0 : mOuterMarginSize;
             }

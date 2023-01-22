@@ -40,15 +40,17 @@
                                 <TextBlock Text="It's about to get fun"
                                            FontSize="{StaticResource FontSizeRegular}"
                                            Foreground="{StaticResource ForegroundDarkBrush}"
+                                           Margin="0 0 0 20"
                                            />
                                 <!-- Email -->
-                                <TextBox />
+                                <TextBox Tag="Email"/>
 
                                 <!-- Password -->
-                                <TextBox />
+                                <PasswordBox Tag="Password" 
+                                         Margin="0 0 0 30"/>
 
                                 <!-- Next button -->
-                                <Button Content="Next"
+                                <Button IsEnabled="False" Content="Next"
                                         HorizontalAlignment="Center"/>
 
                         </StackPanel>
@@ -56,7 +58,7 @@
                             
                     </Border>
 
-                    <Button Content="I already have an account"
+                    <Button Style="{StaticResource TextButton}" Content="I already have an account"
                             HorizontalAlignment="Center"/>
 
 
