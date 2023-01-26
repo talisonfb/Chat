@@ -1,157 +1,140 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Media.Animation;
+using System;
 
 namespace Fasetto.Word
 {
     /// <summary>
-    /// A base page for all pages to gain functionality
+    /// A base page for all pages to gain base functionality
     /// </summary>
     public class BasePage<VM> : Page
         where VM : BaseViewModel, new()
-
     {
+        #region Private Member
 
-    #region Private Member
+        /// <summary>
+        /// The View Model associated with this page
+        /// </summary>
+        private VM mViewModel;
 
-    /// <summary>
-    /// The view model associated with this page
-    /// </summary>
-    private VM mViewModel;
+        #endregion
 
+        #region Public Properties
 
-    #endregion
+        /// <summary>
+        /// The animation the play when the page is first loaded
+        /// </summary>
+        public PageAnimation PageLoadAnimation { get; set; } = PageAnimation.SlideAndFadeInFromRight;
 
-    #region Public Properties
+        /// <summary>
+        /// The animation the play when the page is unloaded
+        /// </summary>
+        public PageAnimation PageUnloadAnimation { get; set; } = PageAnimation.SlideAndFadeOutToLeft;
 
-    /// <summary>
-    /// The animation to play when the page is first loaded
-    /// </summary>
-    public PageAnimation PageLoadAnimation { get; set; } = PageAnimation.SlideAndFadeInFromRight;
+        /// <summary>
+        /// The time any slide animation takes to complete
+        /// </summary>
+        public float SlideSeconds { get; set; } = 0.8f;
 
-    /// <summary>
-    /// The animation to play when the page is unloaded
-    /// </summary>
-    public PageAnimation PageUnloadAnimation { get; set; } = PageAnimation.SlideAndFadeOutToLeft;
-
-    /// <summary>
-    /// The time any slide animations takes to complete
-    /// </summary>
-    public float SlideSeconds { get; set; } = 0.8f;
-
-    /// <summary>
-    /// The view model associated with this page
-    /// </summary>
-    public VM ViewModel
-    {
-        get { return mViewModel; }
-        set
+        /// <summary>
+        /// The View Model associated with this page
+        /// </summary>
+        public VM ViewModel
         {
-            // If nothing has changed, return
-            if (mViewModel == value)
+            get { return mViewModel; }
+            set
+            {
+                // If nothing has changed, return
+                if (mViewModel == value)
+                    return;
+
+                // Update the value
+                mViewModel = value;
+
+                // Set the data context for this page
+                this.DataContext = mViewModel;
+            }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public BasePage()
+        {
+            // If we are animating in, hide to begin with
+            if (this.PageLoadAnimation != PageAnimation.None)
+                this.Visibility = Visibility.Collapsed;
+
+            // Listen out for the page loading
+            this.Loaded += BasePage_Loaded;
+
+            // Create a default view model
+            this.ViewModel = new VM();
+        }
+
+        #endregion
+
+        #region Animation Load / Unload
+
+        /// <summary>
+        /// Once the page is loaded, perform any required animation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void BasePage_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            // Animate the page in
+            await AnimateIn();
+        }
+
+        /// <summary>
+        /// Animates the page in
+        /// </summary>
+        /// <returns></returns>
+        public async Task AnimateIn()
+        {
+            // Make sure we have something to do
+            if (this.PageLoadAnimation == PageAnimation.None)
                 return;
 
-            // Update the value
-            mViewModel = value;
+            switch (this.PageLoadAnimation)
+            {
+                case PageAnimation.SlideAndFadeInFromRight:
 
-            // Set the data context for  this page
-            this.DataContext = mViewModel;
+                    // Start the animation
+                    await this.SlideAndFadeInFromRight(this.SlideSeconds);
+
+                    break;
+            }
         }
-    }
 
-
-    #endregion
-
-    #region Constructor
-
-    /// <summary>
-    /// Default constructor
-    /// </summary>
-    public BasePage()
-    {
-        // If we are animating in, hide to begin with
-        if (this.PageLoadAnimation != PageAnimation.None)
-            this.Visibility = Visibility.Collapsed;
-
-        // Listen out for the page loading
-        this.Loaded += BasePage_Loaded;
-
-        // Create a default view model
-        this.ViewModel = new VM();
-    }
-
-    #endregion
-
-    #region Animation Load/unload
-
-    /// <summary>
-    /// Once the page is loaded, perform any require animation
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    /// <exception cref="System.NotImplementedException"></exception>
-    private async void BasePage_Loaded(object sender, System.Windows.RoutedEventArgs e)
-    {
-        // Animate the page in
-        await AnimateIn();
-    }
-
-    /// <summary>
-    /// Animates the page in
-    /// </summary>
-    /// <returns></returns>
-
-    public async Task AnimateIn()
-    {
-        // Make sure we have something to do 
-        if (this.PageLoadAnimation == PageAnimation.None)
-            return;
-
-        switch (this.PageLoadAnimation)
+        /// <summary>
+        /// Animates the page out
+        /// </summary>
+        /// <returns></returns>
+        public async Task AnimateOut()
         {
-            case PageAnimation.SlideAndFadeInFromRight:
+            // Make sure we have something to do
+            if (this.PageUnloadAnimation == PageAnimation.None)
+                return;
 
-                // Start the animation
-                await this.SlideAndFadeInFromRight(this.SlideSeconds);
+            switch (this.PageUnloadAnimation)
+            {
+                case PageAnimation.SlideAndFadeOutToLeft:
 
-                break;
+                    // Start the animation
+                    await this.SlideAndFadeOutToLeft(this.SlideSeconds);
 
+                    break;
+            }
         }
+
+        #endregion
     }
-
-    /// <summary>
-    /// Animates the page out
-    /// </summary>
-    /// <returns></returns>
-    public async Task AnimateOut()
-    {
-        // Make sure we have something to do 
-        if (this.PageUnloadAnimation == PageAnimation.None)
-            return;
-
-        switch (this.PageUnloadAnimation)
-        {
-            case PageAnimation.SlideAndFadeOutToLeft:
-
-                // Start the animation
-                await this.SlideAndFadeOutToLeft(this.SlideSeconds);
-
-                break;
-
-        }
-    }
-
-
-
-    #endregion
-
-
-
-
-
-
-    }
-
 }

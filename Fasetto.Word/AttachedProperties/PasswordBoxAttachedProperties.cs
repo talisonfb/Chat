@@ -1,12 +1,8 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace Fasetto.Word
 {
-
     /// <summary>
     /// The MonitorPassword attached property for a <see cref="PasswordBox"/>
     /// </summary>
@@ -17,33 +13,32 @@ namespace Fasetto.Word
             // Get the caller
             var passwordBox = sender as PasswordBox;
 
-            // Make sure it its a password box
+            // Make sure it is a password box
             if (passwordBox == null)
                 return;
-            
+
             // Remove any previous events
             passwordBox.PasswordChanged -= PasswordBox_PasswordChanged;
 
             // If the caller set MonitorPassword to true...
             if ((bool)e.NewValue)
             {
-
                 // Set default value
                 HasTextProperty.SetValue(passwordBox);
 
-                //start listening out for password changes
+                // Start listening out for password changes
                 passwordBox.PasswordChanged += PasswordBox_PasswordChanged;
             }
         }
 
         /// <summary>
-        /// Fired when the password box value changes
+        /// Fired when the password box password value changes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            // Set the attached HasText
+            // Set the attached HasText value
             HasTextProperty.SetValue((PasswordBox)sender);
         }
     }

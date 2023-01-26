@@ -9,61 +9,56 @@
       d:DesignHeight="700" d:DesignWidth="700"
       Title="LoginPage">
 
-    <Border Background="{StaticResource WordBlueBrush}">
+    <Border>
         <Grid>
-
-            <!-- Blue background image -->
-            <Grid.Background>
-                <ImageBrush TileMode="Tile" ViewportUnits="Absolute" Viewport="0 0 500 500" ImageSource="/Images/Background/emoji-background.png"></ImageBrush>
-            </Grid.Background>
 
             <!-- Main content scroll -->
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <StackPanel
-                    VerticalAlignment="Center" 
+                <StackPanel 
+                    VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     TextBlock.TextAlignment="Center">
+
                     <!-- Login main content white box -->
-                    <Border Background="{StaticResource ForegroundLightBrush}"
+                    <Border Background="{StaticResource ForegroundLightBrush}" 
                             CornerRadius="10"
                             Padding="15 50 15 15"
                             Width="330"
                             Margin="50 50 50 0">
 
-                            <StackPanel>
-                                <!-- Sign up headers -->
-                                <TextBlock Text="Sign up" 
-                                           FontSize="{StaticResource FontSizeLarge}" 
-                                           FontFamily="{StaticResource LatoRegular}"
-                                           Foreground="{StaticResource WordBlueBrush}"/>
+                        <StackPanel>
 
-                                <!-- Sign up subtext -->
-                                <TextBlock Text="It's about to get fun"
-                                           FontSize="{StaticResource FontSizeRegular}"
-                                           Foreground="{StaticResource ForegroundDarkBrush}"
-                                           Margin="0 0 0 20"
-                                           />
-                                <!-- Email -->
-                                <TextBox Text="{Binding Email}" Tag="Email"/>
+                            <!-- Sign Up header -->
+                            <TextBlock Text="Sign In" 
+                                   FontSize="{StaticResource FontSizeLarge}" 
+                                   FontFamily="{StaticResource LatoRegular}"
+                                   Foreground="{StaticResource WordBlueBrush}" />
 
-                                <!-- Password -->
-                                <PasswordBox x:Name="PasswordText" Tag="Password" 
-                                         Margin="0 0 0 30"/>
+                            <!-- Sign up subtext-->
+                            <TextBlock Text="It's about to get fun" 
+                                       FontSize="{StaticResource FontSizeRegular}"
+                                       Foreground="{StaticResource ForegroundDarkBrush}"
+                                       Margin="0 0 0 20"
+                                       />
 
-                                <!-- Next button -->
-                                <Button IsEnabled="True" Content="Next"
-                                        Command="{Binding LoginCommand}"
-                                        CommandParameter="{Binding ElementName=Page}"
-                                        HorizontalAlignment="Center"/>
+                            <!-- Email -->
+                            <TextBox Text="{Binding Email}" Tag="Email" />
+
+                            <!-- Password -->
+                            <PasswordBox x:Name="PasswordText" Tag="Password" Margin="0 0 0 30" />
+
+                            <!-- Next button -->
+                            <Button Content="Login" 
+                                    local:IsBusyProperty.Value="{Binding LoginIsRunning}"
+                                    Command="{Binding LoginCommand}"
+                                    CommandParameter="{Binding ElementName=Page}" 
+                                    HorizontalAlignment="Center" />
 
                         </StackPanel>
 
-                            
                     </Border>
 
-                    <Button Style="{StaticResource TextButton}" Content="I already have an account"
-                            HorizontalAlignment="Center"/>
-
+                    <Button Style="{StaticResource TextButton}" Content="I already have an account" HorizontalAlignment="Center" />
 
                 </StackPanel>
             </ScrollViewer>

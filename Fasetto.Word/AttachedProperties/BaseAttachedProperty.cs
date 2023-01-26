@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 
 namespace Fasetto.Word
@@ -6,7 +7,7 @@ namespace Fasetto.Word
     /// <summary>
     /// A base attached property to replace the vanilla WPF attached property
     /// </summary>
-    /// <typeparam name="Parent">The parent class to the attached property</typeparam>
+    /// <typeparam name="Parent">The parent class to be the attached property</typeparam>
     /// <typeparam name="Property">The type of this attached property</typeparam>
     public abstract class BaseAttachedProperty<Parent, Property>
         where Parent : BaseAttachedProperty<Parent, Property>, new()
@@ -25,10 +26,7 @@ namespace Fasetto.Word
         /// <summary>
         /// A singleton instance of our parent class
         /// </summary>
-
         public static Parent Instance { get; private set; } = new Parent();
-
-
 
         #endregion
 
@@ -37,18 +35,15 @@ namespace Fasetto.Word
         /// <summary>
         /// The attached property for this class
         /// </summary>
-
-        public static readonly DependencyProperty valueProperty = DependencyProperty.RegisterAttached("Value",typeof(Property),typeof(BaseAttachedProperty<Parent, Property>),new PropertyMetadata(new PropertyChangedCallback(OnValuePropertyChanged)));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.RegisterAttached("Value", typeof(Property), typeof(BaseAttachedProperty<Parent, Property>), new UIPropertyMetadata(new PropertyChangedCallback(OnValuePropertyChanged)));
 
         /// <summary>
-        /// The callback event when the <see cref="valueProperty"/> is changed
+        /// The callback event when the <see cref="ValueProperty"/> is changed
         /// </summary>
-        /// <param name="d">The UI element that had it's property changed </param>
+        /// <param name="d">The UI element that had it's property changed</param>
         /// <param name="e">The arguments for the event</param>
-        /// <exception cref="System.NotImplementedException"></exception>
         private static void OnValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-
             // Call the parent function
             Instance.OnValueChanged(d, e);
 
@@ -57,19 +52,18 @@ namespace Fasetto.Word
         }
 
         /// <summary>
-        /// Get's the attached property
+        /// Gets the attached property
         /// </summary>
-        /// <param name="d">The element to get the property from </param>
+        /// <param name="d">The element to get the property from</param>
         /// <returns></returns>
-
-        public static Property GetValue(DependencyObject d) => (Property)d.GetValue(valueProperty);
+        public static Property GetValue(DependencyObject d) => (Property)d.GetValue(ValueProperty);
 
         /// <summary>
         /// Sets the attached property
         /// </summary>
         /// <param name="d">The element to get the property from</param>
         /// <param name="value">The value to set the property to</param>
-        public static void SetValue(DependencyObject d, Property value) => d.SetValue(valueProperty, value);
+        public static void SetValue(DependencyObject d, Property value) => d.SetValue(ValueProperty, value);
 
         #endregion
 
@@ -79,10 +73,9 @@ namespace Fasetto.Word
         /// The method that is called when any attached property of this type is changed
         /// </summary>
         /// <param name="sender">The UI element that this property was changed for</param>
-        /// <param name="e">The arguments for the event</param>
+        /// <param name="e">The arguments for this event</param>
         public virtual void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) { }
 
         #endregion
     }
-
 }
